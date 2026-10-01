@@ -226,6 +226,7 @@ enum Theme {
         static let settingsControlHeight: CGFloat = 28
         static let emojiSkinToneGlyph: CGFloat = 13
         /// One density preview; five fit across the Emoji settings detail pane.
+        static let screenshotSettingsGridPreview: CGFloat = 72
         static let emojiSettingsGridPreview: CGFloat = 72
         /// The layout editor. Height is stated so selecting an entry cannot resize the panel.
         static let layoutEditorSheet = CGSize(width: 900, height: 660)

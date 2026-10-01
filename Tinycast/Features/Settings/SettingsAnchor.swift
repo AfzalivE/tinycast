@@ -55,6 +55,14 @@ extension SettingsAnchor {
     static let dictationMemory = Self(tab: .dictation, title: "Memory")
     static let dictationOutput = Self(tab: .dictation, title: "Output")
 
+    static let screenshotsScreenshots = Self(tab: .screenshots, title: "Screenshots")
+    static let screenshotsAppearance = Self(tab: .screenshots, title: "Column Count")
+    static let screenshotsScopes = Self(tab: .screenshots, title: "Search Scopes")
+    static let screenshotsMedia = Self(tab: .screenshots, title: "Media")
+    static let screenshotsText = Self(tab: .screenshots, title: "Text Recognition")
+    static let screenshotsStorage = Self(tab: .screenshots, title: "Storage")
+    static let screenshotsCommands = Self(tab: .screenshots, title: "Commands")
+
     static let fileSearchFileSearch = Self(tab: .fileSearch, title: "File Search")
     static let fileSearchCommands = Self(tab: .fileSearch, title: "Commands")
     static let fileSearchSearchScopes = Self(tab: .fileSearch, title: "Search Scopes")

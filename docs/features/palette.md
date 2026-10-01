@@ -89,6 +89,7 @@ every screen but the clipboard, which lands past its pins
 | `.calculatorHistory` | `CalculatorHistoryScreen` | `CalculatorHistoryList` |
 | `.emoji` | `EmojiScreen` | `EmojiGridView` |
 | `.fileSearch` | `FileSearchScreen` | `FileSearchList` (see [file-search.md](file-search.md)) |
+| `.screenshots` | `ScreenshotsScreen` | `ScreenshotsGrid` (see [screenshots.md](screenshots.md)) |
 | `.schedule` | `ScheduleScreen` | `ScheduleList` (see [calendar.md](calendar.md)) |
 | `.meetingDetails` | `MeetingDetailsScreen` | `MeetingDetailsView` (see [calendar.md](calendar.md#the-details-page)) |
 | `.uninstall` | `UninstallScreen` | `UninstallList` (see [uninstall.md](uninstall.md)) |

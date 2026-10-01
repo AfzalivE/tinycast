@@ -109,7 +109,7 @@ enum SettingsSearchCatalog {
 
     static let entries: [SettingsSearchEntry] =
         general + applications + systemSettings + systemActions + commands + quicklinks
-        + appleShortcuts + fallbacks + clipboard + snippets + fileSearch + windowManagement
+        + appleShortcuts + fallbacks + clipboard + screenshots + snippets + fileSearch + windowManagement
         + navigation + notes + calendar + emoji + ai + quickActions + dictation + extensions + permissions
         + backup + about
 
@@ -341,6 +341,19 @@ enum SettingsSearchCatalog {
         .init(.dictationOutput, "Microphone"),
         .init(.dictationOutput, "When finished"),
         .init(.dictationOutput, "Adapt capitalization", keywords: ["uppercase", "lowercase", "sentence"])
+    ]
+
+    private static let screenshots: [SettingsSearchEntry] = [
+        .init(pane: .screenshots, keywords: ["screenshots", "images", "movies", "captures"]),
+        .init(.screenshotsScreenshots, "Enable Screenshots"),
+        .init(.screenshotsAppearance, "Column Count", keywords: ["grid", "density"]),
+        .init(group: .screenshotsScopes, "Search Scopes", keywords: ["folders", "locations"]),
+        .init(.screenshotsMedia, "Include All Media", keywords: ["images", "videos"]),
+        .init(.screenshotsText, "Text Recognition", keywords: ["ocr", "search"]),
+        .init(.screenshotsText, "Recognition Mode", keywords: ["fast", "accurate"]),
+        .init(.screenshotsText, "Allow Text Recognition for Cloud Files", keywords: ["download", "icloud"]),
+        .init(.screenshotsStorage, "Storage Duration", keywords: ["cleanup", "retention", "trash"]),
+        .init(group: .screenshotsCommands, "Screenshot commands", keywords: ["paste last", "hotkey", "alias"])
     ]
 
     private static let fileSearch: [SettingsSearchEntry] = [

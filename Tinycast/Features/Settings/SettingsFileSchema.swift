@@ -65,6 +65,11 @@ enum SettingsFileSchema {
         case .aiNewChatAfter: return bind(ai, \.newChatAfter)
         case .aiToolRounds: return bind(ai, \.toolRounds)
         case .quickActionLanguage: return bind(quickActions, \.settings.targetLanguage)
+        case .screenshotsEnabled: return bind(settings, \.screenshotsEnabled)
+        case .screenshotColumns: return bind(settings, \.screenshotColumns) { (3...6).contains($0) ? $0 : nil }
+        case .screenshotScopes: return bind(settings, \.screenshotScopes)
+        case .screenshotIncludeAllMedia: return bind(settings, \.screenshotIncludeAllMedia)
+        case .screenshotRecognitionMode: return bind(settings, \.screenshotRecognitionMode)
         case .fileSearchEnabled: return bind(settings, \.fileSearchEnabled)
         case .fileSearchScopes: return bind(settings, \.fileSearchScopes)
         case .fileSearchIgnorePatterns: return bind(settings, \.fileSearchIgnorePatterns)
@@ -147,6 +152,7 @@ extension DictationModel: SettingsFileRawValue {}
 extension DictationMode: SettingsFileRawValue {}
 extension DictationDestination: SettingsFileRawValue {}
 extension DictationIdleRelease: SettingsFileRawValue {}
+extension ScreenshotRecognitionMode: SettingsFileRawValue {}
 extension JoinWindow: SettingsFileRawValue {}
 
 extension ClipboardRetention: SettingsFileToken {

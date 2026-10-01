@@ -45,6 +45,11 @@ struct SettingsBackup: Codable {
         var openOnCursorScreen: Bool?
         // Safe to carry: it grants no permission class, just repositions the window.
         var paletteDraggable: Bool?
+        var screenshotsEnabled: Bool?
+        var screenshotColumns: Int?
+        var screenshotScopes: [String]?
+        var screenshotIncludeAllMedia: Bool?
+        var screenshotRecognitionMode: String?
         var fileSearchEnabled: Bool?
         var fileSearchScopes: [String]?
         var fileSearchIgnorePatterns: [String]?
@@ -155,6 +160,11 @@ extension SettingsBackup {
             rootSearchSensitivity: s.rootSearchSensitivity.rawValue,
             openOnCursorScreen: s.openOnCursorScreen,
             paletteDraggable: s.paletteDraggable,
+            screenshotsEnabled: s.screenshotsEnabled,
+            screenshotColumns: s.screenshotColumns,
+            screenshotScopes: s.screenshotScopes,
+            screenshotIncludeAllMedia: s.screenshotIncludeAllMedia,
+            screenshotRecognitionMode: s.screenshotRecognitionMode.rawValue,
             fileSearchEnabled: s.fileSearchEnabled,
             fileSearchScopes: s.fileSearchScopes,
             fileSearchIgnorePatterns: s.fileSearchIgnorePatterns,
@@ -396,6 +406,17 @@ extension SettingsBackup {
             count += 1
         }
         // Writing through AppSettings is enough; AppCore's sinks re-project the rest.
+        if let flag = s.screenshotsEnabled { settings.screenshotsEnabled = flag; count += 1 }
+        if let columns = s.screenshotColumns, (3...6).contains(columns) {
+            settings.screenshotColumns = columns
+            count += 1
+        }
+        if let scopes = s.screenshotScopes { settings.screenshotScopes = scopes; count += 1 }
+        if let flag = s.screenshotIncludeAllMedia { settings.screenshotIncludeAllMedia = flag; count += 1 }
+        if let raw = s.screenshotRecognitionMode, let mode = ScreenshotRecognitionMode(rawValue: raw) {
+            settings.screenshotRecognitionMode = mode
+            count += 1
+        }
         if let flag = s.fileSearchEnabled {
             settings.fileSearchEnabled = flag
             count += 1

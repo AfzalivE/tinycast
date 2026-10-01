@@ -111,11 +111,14 @@ fine too; deciding something with one is what the rule forbids. `showNotice`, `c
 
 New long-lived state belongs on `AppCore`, wired in `start()`. Do not create a competing singleton: this is a singleton, not a container.
 
-Clipboard text recognition runs outside the process. `AppCore` owns the indexer;
+Clipboard and screenshot text recognition run outside the process. `AppCore` owns both indexes;
 the stateless `ClipboardTextWorker` runs one bundled `ClipboardTextHelper` per item, from
 `Contents/Helpers`, and reaps it before returning. Vision's and PDFKit's allocations therefore belong
 to a process that exits, and the helper — which has no database, clipboard or settings access — is
-handed an input path and answers with bounded text down a pipe.
+handed an input path and answers with bounded text down a pipe. Screenshots reuses this helper with
+an explicit Fast / Accurate mode. Its `ScreenshotStore` keeps fingerprints in memory and searchable
+text in a separate channel-local cache database; `ScreenshotsCoordinator` is injected into the palette
+and Settings hierarchies.
 
 Dictation similarly runs its model adapters in a bundled helper, with bounded in-memory audio and
 text over pipes. The coordinator keeps microphone capture, UI and insertion in Tinycast; the model
@@ -233,7 +236,7 @@ Tinycast/
   Assets.xcassets/  the app icon and the bundled image sets some catalog symbols resolve to
   Features/
     PaletteRowIndex.swift   the flat selection index — palette-owned, so it sits at the top
-    Launcher/ Clipboard/ Calculator/ Calendar/ Emoji/ FileSearch/ MenuSearch/ Notes/
+    Launcher/ Clipboard/ Screenshots/ Calculator/ Calendar/ Emoji/ FileSearch/ MenuSearch/ Notes/
     Quicklinks/ Snippets/ Uninstall/ SystemActions/ CustomCommands/ HotKeys/ Backup/
     WindowManagement/ Onboarding/ Updates/ Support/ AI/ Settings/
     Extensions/

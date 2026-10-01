@@ -86,6 +86,8 @@ If a change touches anything in the right column, the harness on the left is man
 | `file-search-session-test` | serialized query execution, debounce coalescing and cancellation |
 | `menu-search-test` | `MenuSearch/Model/` decisions, `MenuSearch/Service/` session filtering, the shared `FuzzyMatch` scorer |
 | `action-menu-search-test` | Action-menu query normalization and shared fuzzy matching |
+| `screenshots-test` | Screenshot queries, filters, cleanup policy, recursive scanning, and private pasteboard transfers |
+| `screenshot-index-test` | Screenshot text persistence, stale-result rejection, opt-in lifecycle, pins, and cancellation |
 | `ranking-test` | `Launcher/Model/LauncherRankingStore.swift` |
 | `scopes-test` | `Launcher/Model/SearchScopes.swift` |
 | `app-name-test` | `Platform/AppDisplayName.swift` — every path that names a scanned bundle |
@@ -389,6 +391,21 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 - Launching an app focuses it; escaping the palette returns focus to the app you came from
 - Paste from clipboard history lands in that app, not in Tinycast
 - No flash, flicker or reflow on open, and row metrics unchanged
+
+### Screenshots
+
+- Enable Screenshots, add a capture folder, and run Search Screenshots. The default system location
+  is present, and 3–6 columns match the settings preview.
+- Search by filename, recognized text, and `date:today`; combine `name:` and `text:` with quoted phrases.
+- All, Images, Movies, and Pinned narrow the grid; arrows follow cells, Return copies, Command-Return pastes.
+- A bound Paste Last Screenshot shortcut pastes the newest screenshot image, regardless of pins or filters.
+- Open, Show in Finder, pin/unpin, and confirmed Trash act on the selected file.
+- Text recognition runs only when enabled. Fast and Accurate both work; cloud-only images stay local-only
+  unless cloud recognition is enabled. Explicit Open or Copy may download the chosen file.
+- Set a short Storage Duration on a fixture folder. Cancel leaves it unchanged. Confirm moves only old,
+  unpinned screenshots to Trash. Ordinary media and pins remain. Never performs no automatic deletion.
+- Disable during recognition, then enable again. Work cancels, commands follow the switch, and no stale
+  query results appear. Closing the palette releases its thumbnails.
 
 ### Clipboard
 

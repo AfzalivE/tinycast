@@ -6,6 +6,7 @@ enum PaletteFilterAction: Equatable {
     case extensionAccessory
     case clipboardFilter
     case fileSearchFilter
+    case screenshotFilter
     case emojiCategory
     case aiModel
     /// No filter on the header, so the key stays with the search field.
@@ -19,6 +20,7 @@ enum PaletteFilterAction: Equatable {
         switch mode {
         case .extensionCommand: return commandHasAccessory ? .extensionAccessory : .ignored
         case .clipboard: return .clipboardFilter
+        case .screenshots: return .screenshotFilter
         case .fileSearch: return .fileSearchFilter
         case .emoji: return .emojiCategory
         case .ai: return .aiModel

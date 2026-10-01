@@ -297,6 +297,38 @@ final class AppSettings {
     }
 
     // Feature switches, off out of the box, and off means fully off.
+    var screenshotsEnabled: Bool {
+        didSet { defaults.set(screenshotsEnabled, forKey: Key.screenshotsEnabled.rawValue) }
+    }
+
+    var screenshotColumns: Int {
+        didSet { defaults.set(screenshotColumns, forKey: Key.screenshotColumns.rawValue) }
+    }
+
+    var screenshotScopes: [String] {
+        didSet { defaults.set(screenshotScopes, forKey: Key.screenshotScopes.rawValue) }
+    }
+
+    var screenshotIncludeAllMedia: Bool {
+        didSet { defaults.set(screenshotIncludeAllMedia, forKey: Key.screenshotIncludeAllMedia.rawValue) }
+    }
+
+    var screenshotRecognizeText: Bool {
+        didSet { defaults.set(screenshotRecognizeText, forKey: Key.screenshotRecognizeText.rawValue) }
+    }
+
+    var screenshotRecognitionMode: ScreenshotRecognitionMode {
+        didSet { defaults.set(screenshotRecognitionMode.rawValue, forKey: Key.screenshotRecognitionMode.rawValue) }
+    }
+
+    var screenshotAllowCloudFiles: Bool {
+        didSet { defaults.set(screenshotAllowCloudFiles, forKey: Key.screenshotAllowCloudFiles.rawValue) }
+    }
+
+    var screenshotRetentionDays: Int {
+        didSet { defaults.set(screenshotRetentionDays, forKey: Key.screenshotRetentionDays.rawValue) }
+    }
+
     var fileSearchEnabled: Bool {
         didSet { defaults.set(fileSearchEnabled, forKey: Key.fileSearchEnabled.rawValue) }
     }
@@ -693,6 +725,16 @@ final class AppSettings {
             as? [String: [Double]] ?? [:]
         paletteExpandedCenterDisplays =
             Set(defaults.stringArray(forKey: Key.paletteExpandedCenterDisplays.rawValue) ?? [])
+        screenshotsEnabled = defaults.bool(forKey: Key.screenshotsEnabled.rawValue)
+        screenshotColumns = min(6, max(3, defaults.integer(forKey: Key.screenshotColumns.rawValue)))
+        screenshotScopes = defaults.stringArray(forKey: Key.screenshotScopes.rawValue)
+            ?? ScreenshotScanner.defaultScopes(home: FileManager.default.homeDirectoryForCurrentUser)
+        screenshotIncludeAllMedia = defaults.bool(forKey: Key.screenshotIncludeAllMedia.rawValue)
+        screenshotRecognizeText = defaults.bool(forKey: Key.screenshotRecognizeText.rawValue)
+        screenshotRecognitionMode = ScreenshotRecognitionMode(
+            rawValue: defaults.string(forKey: Key.screenshotRecognitionMode.rawValue) ?? "") ?? .fast
+        screenshotAllowCloudFiles = defaults.bool(forKey: Key.screenshotAllowCloudFiles.rawValue)
+        screenshotRetentionDays = max(0, defaults.integer(forKey: Key.screenshotRetentionDays.rawValue))
         fileSearchEnabled = defaults.bool(forKey: Key.fileSearchEnabled.rawValue)
         // Unset seeds home; a stored empty array is a cleared list that searches nothing.
         fileSearchScopes =

@@ -254,6 +254,12 @@ run palette-filter-test    Tinycast/Palette/PaletteMode.swift \
                            Tinycast/Features/Quicklinks/Model/Quicklink.swift \
                            Tinycast/Features/Quicklinks/Model/QuicklinkDestination.swift \
                            Tinycast/Features/CustomCommands/Model/CustomCommand.swift
+run screenshots-test       $L/SearchRelevance.swift \
+                            Tinycast/Features/Screenshots/Model/*.swift \
+                            Tinycast/Features/Screenshots/Service/{ScreenshotScanner,ScreenshotTransfer}.swift
+run screenshot-index-test  $L/SearchRelevance.swift \
+                            Tinycast/Features/Screenshots/Model/*.swift \
+                            Tinycast/Features/Screenshots/Service/{ScreenshotScanner,ScreenshotTextIndex,ScreenshotStore}.swift
 run action-menu-search-test Tinycast/Palette/ActionMenuSearchQuery.swift \
                             Tinycast/Features/Launcher/Model/SearchRelevance.swift
 run palette-shortcut-test  Tinycast/Palette/PaletteShortcut.swift
