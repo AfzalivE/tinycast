@@ -427,7 +427,10 @@ transfers, keep their rows in one group.
 Every launcher Action Menu has a native, row-height search field. Footer menus place it below their
 rows; header menus place it above them. `ActionMenuSearchQuery` folds the shared fuzzy query once per
 menu rebuild, then each menu filters its own rows and preserves section boundaries. A search with no
-match keeps the header, when present, and centres **No Results** in one row. The list has no edge
+match keeps the header, when present, and centres **No Results** in one row. Both native and extension
+menu fields request focus on every `menuPresentationToken` change, including the first mount.
+The hosting tree survives dismissal, so `onAppear` alone cannot focus a reopened menu. Query and
+selection updates keep the same token and preserve the field editor's text selection. The list has no edge
 dissolve beside a search field. Its resting inset travels with the scroll content, so rows can reach
 the panel edge without moving their initial position. Footer menus add 30pt to the standard menu
 width; their hover keeps the shared 10pt menu-row corner.

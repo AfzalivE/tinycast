@@ -153,6 +153,6 @@ struct ExtensionMenuSearchField: View {
             .offset(y: verticalOffset)
             .padding(.vertical, metrics.spacing.xxs / 2)
             .accessibilityLabel(placeholder)
-            .onAppear { focused = true }
+            .onChange(of: palette.menuPresentationToken, initial: true) { focused = true }
     }
 }
