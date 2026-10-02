@@ -29,7 +29,7 @@ Settings → Commands.
 ## Search and management
 
 The screen is a newest-first thumbnail grid, with pins first. The header filter offers All, Images,
-Movies, and Pinned. Use ⌘P for the filter and ⌘K for actions.
+Movies, and Pinned. Use ⌘P for the filter, ⌘K for actions, and ⌘Y for Quick Look.
 
 - Plain text searches filenames and recognized image text.
 - `name:receipt` restricts a term to the filename.
@@ -41,6 +41,12 @@ Arrow keys move through grid cells. Return or a double-click copies the image; C
 it into the app that was active before the palette. Image copies include the original image bytes and
 a file URL. Movies copy as files. Actions also provide Open, Show in Finder, Pin / Unpin, Settings,
 and confirmed Move to Trash. A copy made while an image is loading takes priority over that image.
+
+Quick Look appears inside the palette and follows the selected entry. Images use the existing
+Quick Look surface; movies use the existing AVKit player and start playing when previewed.
+Escape, the Close button, or a click in the card's margin closes it. Hiding the palette, leaving
+Screenshots, or reaching an empty result set also closes it and releases playback. Space remains
+ordinary search input.
 
 ## Ownership and storage
 
@@ -71,8 +77,12 @@ the whole library. Filename results are immediate; text matching is cancellable 
 - `screenshot-index-test`: disk fingerprints, replacement and invalidation, pins, opt-in lifecycle,
   cancellation, serialized recognition, and asynchronous text results.
 - `clipboard-text-test`: real Vision recognition, including Fast mode.
+- `palette-navigation-test`: Quick Look closes on hide, fresh summon, and screen navigation.
 
 Live checks: compare all four column counts against the reference layout; copy and paste PNG, JPEG,
 and movie files; use two scopes with overlap; search recognized text; pin an old fixture before
 turning cleanup on; verify that only the unpinned old screenshot fixture reaches Trash. Verify the
 search screen in Light and Dark and confirm that thumbnails release when the palette closes.
+Open Quick Look from Actions and ⌘Y, move between images and movies, and check movie playback and
+transport controls. Escape closes only the preview. Hiding the palette stops playback; reopening
+and searches with no results leave the preview closed.

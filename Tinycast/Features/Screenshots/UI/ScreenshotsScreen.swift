@@ -25,6 +25,7 @@ struct ScreenshotsScreen: PaletteScreen {
         case .delete, .commandDelete: coordinator.trash(entry)
         case .copyFile: coordinator.copy(entry)
         case .pasteFile: coordinator.copy(entry, paste: true)
+        case .quickLook: coordinator.palette.isQuickLookPresented.toggle()
         default: return false
         }
         return true
@@ -47,6 +48,9 @@ struct ScreenshotsScreen: PaletteScreen {
             },
             .init(title: "Open", systemImage: "arrow.up.forward.app") { coordinator.open(entry) },
             .init(title: "Show in Finder", systemImage: "folder") { coordinator.reveal(entry) },
+            .init(title: "Quick Look", systemImage: "eye", shortcut: "⌘Y") {
+                coordinator.palette.isQuickLookPresented = true
+            },
             .init(title: pinned ? "Unpin" : "Pin", systemImage: pinned ? "pin.slash" : "pin",
                   startsSection: true, shortcut: "⌘.") { coordinator.togglePin(entry) },
             .init(title: "Screenshot Settings…", systemImage: "gearshape", startsSection: true) {
@@ -58,8 +62,19 @@ struct ScreenshotsScreen: PaletteScreen {
     }
 
     func body(selection: Int, scroll: ScrollIntent) -> AnyView {
-        AnyView(ScreenshotsGrid(
-            entries: rows, selection: selection, scroll: scroll, openActions: openActions))
+        let entries = rows
+        let palette = coordinator.palette
+        return AnyView(ScreenshotsGrid(
+            entries: entries, selection: selection, scroll: scroll, openActions: openActions)
+            .overlay {
+                if palette.isVisible, palette.isQuickLookPresented, entries.indices.contains(selection) {
+                    let entry = entries[selection]
+                    FileSearchQuickLook(url: entry.url, name: entry.name) { palette.isQuickLookPresented = false }
+                }
+            }
+            .onChange(of: entries.isEmpty) {
+                if entries.isEmpty { palette.isQuickLookPresented = false }
+            })
     }
 
     private func entry(at selection: Int) -> ScreenshotEntry? {

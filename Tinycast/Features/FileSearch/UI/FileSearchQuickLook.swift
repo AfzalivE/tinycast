@@ -4,7 +4,8 @@ import SwiftUI
 struct FileSearchQuickLook: View {
 
     @Environment(\.metrics) private var metrics
-    let result: FileSearchResult
+    let url: URL
+    let name: String
     let onClose: () -> Void
 
     /// Concentric: every corner inside the panel is the one outside it less its own inset.
@@ -26,7 +27,7 @@ struct FileSearchQuickLook: View {
             surface
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             HStack(spacing: metrics.spacing.sm) {
-                Text(result.name)
+                Text(name)
                     .font(metrics.typography.rowTitle)
                     .lineLimit(1)
                     .truncationMode(.middle)
@@ -47,7 +48,7 @@ struct FileSearchQuickLook: View {
     }
 
     private var surface: some View {
-        FileSearchSurface(url: result.url, autoplays: true)
+        FileSearchSurface(url: url, autoplays: true)
             .clipShape(RoundedRectangle(cornerRadius: surfaceRadius, style: .continuous))
     }
 }

@@ -210,7 +210,8 @@ never what the row means.
 
 Quick Look (⌘Y) draws **inside the panel**: the palette hides itself on `windowDidResignKey` and the panel
 is non-activating, so a system `QLPreviewPanel` would take key and close the palette under itself.
-`FileSearchQuickLook` hosts the same two surfaces the pane does, following the selection. **Escape is
+`FileSearchQuickLook` takes a URL and filename and hosts the same surfaces the pane does, following
+the selection. Screenshots reuses this card and the palette's Quick Look state. **Escape is
 answered by `PalettePanel.onEscape`**, not by the palette's own key handler: a focused `AVPlayerView`
 takes the key window's Escape first, and `sendEvent` is the one place ahead of it. **Only the margin
 around the card dismisses on a click** — a tap over the preview belongs to the preview's own transport,

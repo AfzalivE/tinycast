@@ -400,6 +400,10 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 - All, Images, Movies, and Pinned narrow the grid; arrows follow cells, Return copies, Command-Return pastes.
 - A bound Paste Last Screenshot shortcut pastes the newest screenshot image, regardless of pins or filters.
 - Open, Show in Finder, pin/unpin, and confirmed Trash act on the selected file.
+- Quick Look from Actions or ⌘Y previews the selected image or plays its movie. Arrows update the
+  preview. Escape closes only the preview; Close and the card margin also dismiss it. Hiding,
+  leaving Screenshots, or filtering to no results closes it and stops playback. Reopening leaves
+  it closed. Spaces still type into the search field.
 - Text recognition runs only when enabled. Fast and Accurate both work; cloud-only images stay local-only
   unless cloud recognition is enabled. Explicit Open or Copy may download the chosen file.
 - Set a short Storage Duration on a fixture folder. Cancel leaves it unchanged. Confirm moves only old,
