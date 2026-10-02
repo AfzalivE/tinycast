@@ -100,10 +100,36 @@ struct ScreenshotsTests {
         ScreenshotTransfer.write(data, entry: capture, to: board)
         expect(board.data(forType: .png) == png, "copy preserves original image bytes")
         expect(board.string(forType: .fileURL) != nil, "copy also supports file-taking apps")
+        try movieTransfers(in: root, to: board, now: now)
         try manager.removeItem(at: screenshot)
         do {
             _ = try ScreenshotTransfer.read(capture)
             expect(false, "vanished file must fail")
         } catch { expect(true, "vanished file is reported") }
+    }
+
+    static func movieTransfers(in root: URL, to board: NSPasteboard, now: Date) throws {
+        for ext in ["mov", "mp4", "m4v"] {
+            let url = root.appending(path: "Screen Recording café #1.\(ext)")
+            let bytes = Data("movie fixture".utf8)
+            try bytes.write(to: url)
+            let entry = ScreenshotEntry(
+                url: url, createdAt: now, modifiedAt: now, byteCount: bytes.count,
+                isVideo: true, isScreenshot: true, isCloudOnly: false)
+            let data = try ScreenshotTransfer.read(entry)
+            expect(data == nil, "\(ext) transfers do not load movie bytes into memory")
+            ScreenshotTransfer.write(data, entry: entry, to: board)
+            let files = board.readObjects(forClasses: [NSURL.self], options: [.urlReadingFileURLsOnly: true])
+            expect(files as? [URL] == [url], "\(ext) is offered as the original video file")
+            expect(board.data(forType: .png) == nil, "\(ext) does not paste a previous image or thumbnail")
+            expect(try Data(contentsOf: url) == bytes, "\(ext) source remains unchanged")
+            try FileManager.default.removeItem(at: url)
+            let changeCount = board.changeCount
+            do {
+                _ = try ScreenshotTransfer.read(entry)
+                expect(false, "a vanished \(ext) must fail")
+            } catch { expect(true, "a vanished \(ext) is reported") }
+            expect(board.changeCount == changeCount, "a vanished \(ext) leaves the clipboard unchanged")
+        }
     }
 }

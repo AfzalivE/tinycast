@@ -8,12 +8,14 @@ nonisolated enum ScreenshotTransfer {
     }
 
     static func read(_ entry: ScreenshotEntry) throws -> Data? {
-        let values = try entry.url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
+        var url = entry.url
+        url.removeAllCachedResourceValues()
+        let values = try url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
         guard values.isRegularFile == true else { throw CocoaError(.fileReadNoSuchFile) }
         guard !entry.isVideo else { return nil }
         let size = values.fileSize ?? 0
         guard size <= 64 * 1024 * 1024 else { throw Failure.tooLarge }
-        return try Data(contentsOf: entry.url, options: .mappedIfSafe)
+        return try Data(contentsOf: url, options: .mappedIfSafe)
     }
 
     @MainActor

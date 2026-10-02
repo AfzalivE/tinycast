@@ -73,7 +73,8 @@ the whole library. Filename results are immediate; text matching is cancellable 
 ## Verification
 
 - `screenshots-test`: query syntax, filters, expiry safety, real recursive scanning, overlapping
-  scopes, hidden files, symlinks, missing folders, and private-pasteboard image/file writes.
+  scopes, hidden files, symlinks, missing folders, and private-pasteboard image/file writes,
+  including native file reads for MOV, MP4, and M4V without thumbnail data.
 - `screenshot-index-test`: disk fingerprints, replacement and invalidation, pins, opt-in lifecycle,
   cancellation, serialized recognition, and asynchronous text results.
 - `clipboard-text-test`: real Vision recognition, including Fast mode.

@@ -404,6 +404,8 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
   preview. Escape closes only the preview; Close and the card margin also dismiss it. Hiding,
   leaving Screenshots, or filtering to no results closes it and stops playback. Reopening leaves
   it closed. Spaces still type into the search field.
+- Copy or paste a MOV, MP4, or M4V into a file-taking app: it receives the original video file,
+  with no screenshot thumbnail. A vanished video leaves the clipboard unchanged.
 - Text recognition runs only when enabled. Fast and Accurate both work; cloud-only images stay local-only
   unless cloud recognition is enabled. Explicit Open or Copy may download the chosen file.
 - Set a short Storage Duration on a fixture folder. Cancel leaves it unchanged. Confirm moves only old,
