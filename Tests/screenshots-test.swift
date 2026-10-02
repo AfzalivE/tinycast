@@ -94,6 +94,7 @@ struct ScreenshotsTests {
                "cleanup never removes ordinary media")
         let capture = captures.entries.first { $0.name == screenshot.lastPathComponent }!
         expect(!capture.isCloudOnly, "local files are resident")
+        fileDrag(capture)
         let board = NSPasteboard.withUniqueName()
         defer { board.releaseGlobally() }
         let data = try ScreenshotTransfer.read(capture)
@@ -116,6 +117,7 @@ struct ScreenshotsTests {
             let entry = ScreenshotEntry(
                 url: url, createdAt: now, modifiedAt: now, byteCount: bytes.count,
                 isVideo: true, isScreenshot: true, isCloudOnly: false)
+            fileDrag(entry)
             let data = try ScreenshotTransfer.read(entry)
             expect(data == nil, "\(ext) transfers do not load movie bytes into memory")
             ScreenshotTransfer.write(data, entry: entry, to: board)
@@ -131,5 +133,18 @@ struct ScreenshotsTests {
             } catch { expect(true, "a vanished \(ext) is reported") }
             expect(board.changeCount == changeCount, "a vanished \(ext) leaves the clipboard unchanged")
         }
+    }
+
+    static func fileDrag(_ entry: ScreenshotEntry) {
+        let preview = NSImage(size: NSSize(width: 32, height: 32))
+        let item = RowDragItem.file(entry.url, image: preview)
+        let board = NSPasteboard.withUniqueName()
+        defer { board.releaseGlobally() }
+        expect(board.writeObjects([item.writer]), "\(entry.name) supplies a drag pasteboard writer")
+        let files = board.readObjects(forClasses: [NSURL.self], options: [.urlReadingFileURLsOnly: true])
+        expect(files as? [URL] == [entry.url], "\(entry.name) drags the original file")
+        expect(board.data(forType: .png) == nil && board.data(forType: .tiff) == nil,
+               "\(entry.name) does not drag thumbnail bytes")
+        expect(item.image === preview, "\(entry.name) reuses the warm thumbnail as its drag preview")
     }
 }

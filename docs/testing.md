@@ -406,6 +406,10 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
   it closed. Spaces still type into the search field.
 - Copy or paste a MOV, MP4, or M4V into a file-taking app: it receives the original video file,
   with no screenshot thumbnail. A vanished video leaves the clipboard unchanged.
+- Drag image and movie tiles into Finder and a browser upload field. The receiver gets the original
+  file, not the thumbnail; the source stays in place. A completed drop hides the palette. Cancelling
+  or dropping on a rejected target keeps it open. Click selects, double-click copies, and right-click
+  opens Actions.
 - Text recognition runs only when enabled. Fast and Accurate both work; cloud-only images stay local-only
   unless cloud recognition is enabled. Explicit Open or Copy may download the chosen file.
 - Set a short Storage Duration on a fixture folder. Cancel leaves it unchanged. Confirm moves only old,

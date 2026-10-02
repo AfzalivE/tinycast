@@ -133,6 +133,8 @@ final class ScreenshotsCoordinator {
         }
     }
 
+    func dragLanded() { core.paletteCoordinator.dragLanded() }
+
     func showSettings() { core.settingsCoordinator.showSettings(tab: .screenshots) }
 
     func stop() { operation?.cancel(); store.stop() }

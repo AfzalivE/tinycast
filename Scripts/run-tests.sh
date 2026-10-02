@@ -255,6 +255,7 @@ run palette-filter-test    Tinycast/Palette/PaletteMode.swift \
                            Tinycast/Features/Quicklinks/Model/QuicklinkDestination.swift \
                            Tinycast/Features/CustomCommands/Model/CustomCommand.swift
 run screenshots-test       $L/SearchRelevance.swift \
+                            Tinycast/DesignSystem/Interaction/RowClick.swift \
                             Tinycast/Features/Screenshots/Model/*.swift \
                             Tinycast/Features/Screenshots/Service/{ScreenshotScanner,ScreenshotTransfer}.swift
 run screenshot-index-test  $L/SearchRelevance.swift \

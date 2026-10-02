@@ -60,7 +60,8 @@ struct ScreenshotsGrid: View {
                                     onActions: {
                                         coordinator.palette.selection = index
                                         openActions()
-                                    })
+                                    },
+                                    onDropped: { coordinator.dragLanded() })
                             }
                         }
                         .selectionFrame(row.id == selectedRow)
@@ -92,6 +93,7 @@ private struct ScreenshotTile: View {
     let onSelect: () -> Void
     let onActivate: () -> Void
     let onActions: () -> Void
+    let onDropped: () -> Void
     @Environment(\.metrics) private var metrics
     @Environment(\.displayScale) private var displayScale
     @State private var image: NSImage?
@@ -128,8 +130,9 @@ private struct ScreenshotTile: View {
         }
         .frame(width: size)
         .contentShape(.rect)
-        .onTapGesture(perform: onSelect)
-        .simultaneousGesture(TapGesture(count: 2).onEnded(onActivate))
+        .onRowClick(
+            select: onSelect, activate: onActivate,
+            drag: RowDrag(item: { .file(entry.url, image: image) }, dropped: onDropped))
         .onRightClick(perform: onActions)
         .armedHover($hovered)
         .tooltip(entry.name)

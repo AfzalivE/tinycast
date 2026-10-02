@@ -48,6 +48,17 @@ Escape, the Close button, or a click in the card's margin closes it. Hiding the 
 Screenshots, or reaching an empty result set also closes it and releases playback. Space remains
 ordinary search input.
 
+### Dragging out
+
+Drag an image or movie tile into Finder, a browser upload field, or another app. The drag carries
+the original file URL; the thumbnail is only its visual preview. It uses the existing
+`onRowClick(drag:)` path and is copy-only, so the source file stays in its search folder.
+A completed drop hides the palette. A cancelled or rejected drop returns to the tile and keeps
+it open. A click selects, a double-click copies, and right-click still opens Actions.
+
+This also supports video uploads on sites such as GitHub, whose paste handler accepts images
+but whose file-drop handler accepts videos. The destination's format and size limits still apply.
+
 ## Ownership and storage
 
 `AppCore` owns `ScreenshotStore` and `ScreenshotsCoordinator`. Both palette and settings hierarchies
@@ -74,7 +85,8 @@ the whole library. Filename results are immediate; text matching is cancellable 
 
 - `screenshots-test`: query syntax, filters, expiry safety, real recursive scanning, overlapping
   scopes, hidden files, symlinks, missing folders, and private-pasteboard image/file writes,
-  including native file reads for MOV, MP4, and M4V without thumbnail data.
+  including native file reads for MOV, MP4, and M4V without thumbnail data. Drag payloads use the
+  shipped `RowDragItem.file` writer and carry the original file, with a separate cached preview.
 - `screenshot-index-test`: disk fingerprints, replacement and invalidation, pins, opt-in lifecycle,
   cancellation, serialized recognition, and asynchronous text results.
 - `clipboard-text-test`: real Vision recognition, including Fast mode.
@@ -86,4 +98,7 @@ turning cleanup on; verify that only the unpinned old screenshot fixture reaches
 search screen in Light and Dark and confirm that thumbnails release when the palette closes.
 Open Quick Look from Actions and ⌘Y, move between images and movies, and check movie playback and
 transport controls. Escape closes only the preview. Hiding the palette stops playback; reopening
-and searches with no results leave the preview closed.
+and searches with no results leave the preview closed. Drag a PNG and MOV into a disposable Finder
+folder and a browser upload field; verify the original file arrives and remains in its source folder.
+Cancel a drag and try a rejected target: the palette stays open. Confirm that clicks, double-clicks,
+and right-clicks retain their actions.
