@@ -15,7 +15,8 @@ in `Features/WindowManagement/`.
   excluded from backups: a file or an import must never switch on something that reads a file.
 - **A capability grant never has a key.** Snippets, Extensions, Calendar access, Auto Join, Camera
   Preview, Quick Actions, MCP and clipboard text recognition are switched on only in the app, which
-  asks first. `settings-file-test` checks those paths stay absent.
+  asks first. Screenshot OCR, cloud downloads, and automatic cleanup also stay app-only.
+  `settings-file-test` checks those paths stay absent.
 - **`SettingsFileSchema`'s switch is exhaustive.** A new `SettingsFileKey` case fails to build until it
   is bound to a property.
 - **A bad edit never costs a setting.** A key the file leaves out keeps its value; a value Tinycast
@@ -117,6 +118,8 @@ Where a number has a special case, the case is a word:
 | `calendar.menuBarUpcomingEvents` | `"today"`, or 2, 5, 10, 30 minutes before |
 | `calendar.hideCurrentEventAfterMinutes` | `"never"`, 0 (as it starts), 5, 10, 30 |
 | `windowManagement.gap` | 0 to 64 |
+| `screenshots.columns` | 3 to 6 |
+| `screenshots.recognitionMode` | `"fast"`, `"accurate"` |
 | `snippets.folder`, `notes.folder` | an absolute or `~/` path, or `null` for Application Support |
 
 ## Shortcut chords

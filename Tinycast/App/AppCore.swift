@@ -56,6 +56,14 @@ final class AppCore {
     let runningApps = RunningAppsMonitor()
     let palette = PaletteState()
     let fileSearch = FileSearchSession()
+    let screenshots = ScreenshotStore(
+        defaults: .standard, cacheURL: AppPaths.caches().appending(path: "screenshot-text.sqlite3")
+    ) { url, mode in
+        try await ClipboardTextWorker.extract(
+            at: url, isPDF: false,
+            executable: Bundle.main.bundleURL.appending(path: "Contents/Helpers/ClipboardTextHelper"),
+            timeout: .seconds(15), accurate: mode == .accurate)
+    }
     let dictionary = DictionarySession()
     let menuSearch = MenuSearchSession()
     let windowSwitch = WindowSwitchSession()
@@ -199,6 +207,8 @@ final class AppCore {
     @ObservationIgnored private(set) lazy var calendarCoordinator = CalendarCoordinator(
         store: calendarStore, clock: meetingClock, appIndex: appIndex, settings: settings,
         paletteCoordinator: paletteCoordinator, core: self)
+    @ObservationIgnored private(set) lazy var screenshotsCoordinator = ScreenshotsCoordinator(
+        store: screenshots, windowController: windowController, core: self)
     @ObservationIgnored private(set) lazy var fileSearchCoordinator = FileSearchCoordinator(
         settings: settings, appIndex: appIndex, session: fileSearch, palette: palette,
         paletteCoordinator: paletteCoordinator, windowController: windowController, core: self)
@@ -287,6 +297,7 @@ final class AppCore {
             extensions.start(appIndex: appIndex, coordinator: extensionCoordinator)
             extensionCoordinator.applyEnabled()
             fileSearchCoordinator.applyEnabled()
+            screenshotsCoordinator.applySettings()
             windowSwitchCoordinator.applyEnabled()
             menuSearchCoordinator.applyEnabled()
             fileSearchCoordinator.applyPolicy()
@@ -550,6 +561,7 @@ final class AppCore {
         if settings.dictationEnabled { dictationCoordinator.prepareForTermination() }
         settingsFile?.flush()
         clipboardTextIndexer?.stop()
+        screenshotsCoordinator.stop()
         // Caps Lock first: its remap is the one teardown that outlives the process.
         hyperKeyTap.prepareForTermination()
         windowLayoutCoordinator.prepareForTermination()
@@ -658,6 +670,15 @@ final class AppCore {
         track(
             { _ = $0.clipboardTextSearchEnabled }, reproject: { $0.applyClipboardTextSearch() })
         track({ _ = $0.fileSearchEnabled }, reproject: { $0.fileSearchCoordinator.applyEnabled() })
+        track({
+            _ = $0.screenshotsEnabled
+            _ = $0.screenshotScopes
+            _ = $0.screenshotIncludeAllMedia
+            _ = $0.screenshotRecognizeText
+            _ = $0.screenshotRecognitionMode
+            _ = $0.screenshotAllowCloudFiles
+            _ = $0.screenshotRetentionDays
+        }, reproject: { $0.screenshotsCoordinator.applySettings() })
         // Two features, one switch: each coordinator gates only its own command and mode.
         track(
             { _ = $0.navigationEnabled },

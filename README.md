@@ -49,6 +49,8 @@ Tinycast is **free, and it stays that way**. If you enjoy it, consider buying a 
 - **Dictionary** — look a word up with the Define Word command, or define whatever you typed from the
   launcher's fallbacks, read from the Mac's own dictionaries.
 - **Clipboard history** — text and images, searchable, pasted back into the app you were using.
+- **Screenshots** — search a thumbnail grid by name, date, or recognized text. Copy, paste, pin, or
+  trash captures, and paste the last screenshot with a command or hotkey.
 - **Calculator** — do math, unit, live currency and crypto conversions inline, right in the palette.
 - **Quicklinks** — turn a URL, search, file or deeplink into a command, with placeholders for typed
   input, the clipboard or the date.

@@ -13,6 +13,7 @@ struct RootPaletteView: View {
     @Environment(EmojiIndex.self) private var emojiIndex
     @Environment(FrequentEmojiStore.self) private var frequentEmoji
     @Environment(FileSearchSession.self) private var fileSearch
+    @Environment(ScreenshotsCoordinator.self) private var screenshots
     @Environment(DictionarySession.self) private var dictionary
     @Environment(MenuSearchSession.self) private var menuSearch
     @Environment(WindowSwitchSession.self) private var windowSwitch
@@ -71,6 +72,8 @@ struct RootPaletteView: View {
                 index: emojiIndex, frequent: frequentEmoji, pinned: core.pinnedEmoji, core: core, vm: vm,
                 tone: settings.emojiSkinTone, defaultColumns: settings.emojiGridColumns,
                 openActions: openActions)
+        case .screenshots:
+            return ScreenshotsScreen(coordinator: screenshots, openActions: openActions)
         case .fileSearch:
             return FileSearchScreen(
                 session: fileSearch, core: core, vm: vm, openActions: openActions)
@@ -163,6 +166,14 @@ struct RootPaletteView: View {
     }
 
     /// The file search type filter's rows, built the way the clipboard's are.
+    private var screenshotFilterContent: PopoverMenuContent {
+        PopoverMenuContent(items: ScreenshotFilter.allCases.map { filter in
+            PopoverMenuItem(
+                title: filter.title, systemImage: screenshots.filter == filter ? "checkmark" : "photo.on.rectangle"
+            ) { screenshots.filter = filter }
+        })
+    }
+
     private var fileSearchFilterContent: PopoverMenuContent {
         PopoverMenuContent(
             items: FileSearchFilter.allCases.map { filter in
@@ -237,6 +248,8 @@ struct RootPaletteView: View {
         case .clipboardFilter:
             return headerMenu(
                 clipboardFilterContent, width: metrics.size.clipboardFilterMenuWidth)
+        case .screenshotFilter:
+            return headerMenu(screenshotFilterContent, width: metrics.size.menuWidth)
         case .fileSearchFilter:
             return headerMenu(fileSearchFilterContent, width: metrics.size.fileSearchFilterMenuWidth)
         case .emojiCategory:
@@ -402,7 +415,7 @@ struct RootPaletteView: View {
                 vm.fileSearchFilter = .all
                 vm.emojiCategoryFilter = .all
                 vm.emojiGridColumnsOverride = nil
-                vm.fileSearchQuickLook = false
+                vm.isQuickLookPresented = false
                 if menuOpen { closeMenus() }
                 land()
                 searchFocused = !screen.hidesSearchField
@@ -677,6 +690,13 @@ struct RootPaletteView: View {
                 ClipboardFilterButton(
                     filter: vm.clipboardFilter, isOpen: openMenu == .clipboardFilter,
                     action: toggleClipboardFilter)
+            }
+            if !isCollapsed, vm.mode == .screenshots {
+                headerGutter(width: metrics.spacing.md)
+                HeaderMenuButton(
+                    title: screenshots.filter.title, systemImage: "line.3.horizontal.decrease",
+                    isOpen: openMenu == .screenshotFilter, help: "Filter screenshots  ⌘P",
+                    action: toggleScreenshotFilter)
             }
             if !isCollapsed, vm.mode == .fileSearch {
                 headerGutter(width: metrics.spacing.md)
@@ -966,6 +986,11 @@ struct RootPaletteView: View {
         open(.clipboardFilter, highlighting: active)
     }
 
+    private func toggleScreenshotFilter() {
+        if openMenu == .screenshotFilter { closeMenus(); return }
+        open(.screenshotFilter, highlighting: ScreenshotFilter.allCases.firstIndex(of: screenshots.filter) ?? 0)
+    }
+
     private func toggleFileSearchFilter() {
         if openMenu == .fileSearchFilter {
             closeMenus()
@@ -982,6 +1007,7 @@ struct RootPaletteView: View {
         {
         case .extensionAccessory: toggleExtensionSearchAccessory()
         case .clipboardFilter: toggleClipboardFilter()
+        case .screenshotFilter: toggleScreenshotFilter()
         case .fileSearchFilter: toggleFileSearchFilter()
         case .emojiCategory: toggleEmojiCategory()
         case .aiModel: toggleAIModel()
@@ -1212,7 +1238,7 @@ struct RootPaletteView: View {
         case .app: .bottomLeading
         case .actions: .bottomTrailing
         case .argumentOptions: .belowHeaderTrailing
-        case .clipboardFilter, .fileSearchFilter, .emojiCategory, .aiModel, .aiReasoning,
+        case .clipboardFilter, .fileSearchFilter, .screenshotFilter, .emojiCategory, .aiModel, .aiReasoning,
             .aiAttachments, .extensionAccessory:
             .belowHeaderTrailing
         case nil: nil
@@ -1428,6 +1454,7 @@ private enum OpenMenu {
     case app
     case clipboardFilter
     case fileSearchFilter
+    case screenshotFilter
     case emojiCategory
     case aiModel
     case aiReasoning

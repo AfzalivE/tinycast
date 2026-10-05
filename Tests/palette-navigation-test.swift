@@ -126,7 +126,41 @@ struct PaletteNavigationTests {
             !pasted.collapseQueryLineBreaks() && pasted.query == "first pasted row, second pasted row third",
             "a single-line query is left alone")
 
+        quickLookLifetime()
+
         print("\(passes) passed, \(failures) failed")
         if failures > 0 { exit(1) }
+    }
+
+    static func quickLookLifetime() {
+        for mode in [PaletteMode.fileSearch, .screenshots] {
+            let vm = PaletteState()
+            vm.prepare(mode: mode)
+            vm.noteVisible(true)
+            vm.isQuickLookPresented = true
+            vm.selection = 1
+            expect(vm.isQuickLookPresented, "Quick Look follows selection changes in \(mode)")
+            vm.noteVisible(false)
+            expect(!vm.isQuickLookPresented, "hiding the palette closes Quick Look in \(mode)")
+            vm.noteVisible(true)
+            expect(!vm.isQuickLookPresented, "reopening does not restore Quick Look in \(mode)")
+
+            vm.isQuickLookPresented = true
+            vm.prepare(mode: mode)
+            expect(!vm.isQuickLookPresented, "a fresh summon closes Quick Look in \(mode)")
+            vm.isQuickLookPresented = true
+            vm.replace(mode: .launcher)
+            expect(!vm.isQuickLookPresented, "replacing the screen closes Quick Look in \(mode)")
+            vm.prepare(mode: mode)
+            vm.isQuickLookPresented = true
+            vm.push(mode: .clipboard)
+            expect(!vm.isQuickLookPresented, "pushing another screen closes Quick Look in \(mode)")
+            expect(vm.pop() && !vm.isQuickLookPresented, "returning does not restore Quick Look in \(mode)")
+
+            vm.prepare(mode: .launcher)
+            vm.push(mode: mode)
+            vm.isQuickLookPresented = true
+            expect(vm.pop() && !vm.isQuickLookPresented, "leaving through Back closes Quick Look in \(mode)")
+        }
     }
 }

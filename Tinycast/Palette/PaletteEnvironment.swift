@@ -28,6 +28,7 @@ extension View {
             .environment(core.emojiIndex)
             .environment(core.frequentEmoji)
             .environment(core.fileSearch)
+            .environment(core.screenshotsCoordinator)
             .environment(core.dictionary)
             .environment(core.menuSearch)
             .environment(core.windowSwitch)

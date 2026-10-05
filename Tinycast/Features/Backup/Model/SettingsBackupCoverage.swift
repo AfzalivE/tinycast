@@ -27,6 +27,11 @@ enum SettingsBackupCoverage {
         "rootSearchSensitivity": .rootSearchSensitivity,
         "openOnCursorScreen": .openOnCursorScreen,
         "paletteDraggable": .paletteDraggable,
+        "screenshotsEnabled": .screenshotsEnabled,
+        "screenshotColumns": .screenshotColumns,
+        "screenshotScopes": .screenshotScopes,
+        "screenshotIncludeAllMedia": .screenshotIncludeAllMedia,
+        "screenshotRecognitionMode": .screenshotRecognitionMode,
         "fileSearchEnabled": .fileSearchEnabled,
         "fileSearchScopes": .fileSearchScopes,
         "fileSearchIgnorePatterns": .fileSearchIgnorePatterns,
@@ -85,6 +90,12 @@ enum SettingsBackupCoverage {
             "Dictation preferences stay local until backup supports them.",
         AppSettingsKey.dictationIdleRelease.rawValue:
             "Dictation memory use stays a device-local preference.",
+        AppSettingsKey.screenshotRecognizeText.rawValue:
+            "Background OCR is an opt-in processing choice on this Mac.",
+        AppSettingsKey.screenshotAllowCloudFiles.rawValue:
+            "An import must not download cloud-only files for text recognition.",
+        AppSettingsKey.screenshotRetentionDays.rawValue:
+            "An import must not enable automatic deletion of original screenshots.",
         AppSettingsKey.clipboardTextSearchEnabled.rawValue:
             "Background OCR is an opt-in processing choice on this Mac; a backup must not enable it.",
         AppSettingsKey.snippetsEnabled.rawValue:

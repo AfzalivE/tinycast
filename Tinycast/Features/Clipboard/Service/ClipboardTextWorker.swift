@@ -20,13 +20,13 @@ nonisolated enum ClipboardTextWorker {
     }
 
     static func extract(
-        at url: URL, isPDF: Bool, executable: URL, timeout: Duration = .seconds(60)
+        at url: URL, isPDF: Bool, executable: URL, timeout: Duration = .seconds(60), accurate: Bool = true
     ) async throws -> String {
         try Task.checkCancellation()
         let process = Process()
         let output = Pipe()
         process.executableURL = executable
-        process.arguments = [isPDF ? "pdf" : "image", url.path]
+        process.arguments = [isPDF ? "pdf" : "image", url.path, accurate ? "accurate" : "fast"]
         process.standardInput = FileHandle.nullDevice
         process.standardOutput = output
         process.standardError = FileHandle.nullDevice

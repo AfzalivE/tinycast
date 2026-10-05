@@ -26,6 +26,10 @@ struct ClipboardTextTests {
             try await ClipboardTextExtractor.extract(at: imageURL, isPDF: false)
         }.value
         expect(imageText.localizedCaseInsensitiveContains("ALPINE RECEIPT 7391"), "Vision recognizes image")
+        let fastText = try await Task.detached {
+            try await ClipboardTextExtractor.extract(at: imageURL, isPDF: false, accurate: false)
+        }.value
+        expect(fastText.contains("7391"), "fast recognition reads screenshot text")
         let fileText = try await Task.detached {
             try await ClipboardTextExtractor.extract(at: imageURL, isPDF: false)
         }.value

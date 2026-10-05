@@ -15,7 +15,7 @@ nonisolated enum ClipboardTextExtractor {
 
     enum Failure: Error { case unreadable }
 
-    static func extract(at url: URL, isPDF: Bool) async throws -> String {
+    static func extract(at url: URL, isPDF: Bool, accurate: Bool = true) async throws -> String {
         try Task.checkCancellation()
         let values = try url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
         guard values.isRegularFile == true, let size = values.fileSize,
@@ -23,7 +23,7 @@ nonisolated enum ClipboardTextExtractor {
         else { return "" }
         if isPDF { return try await extractPDF(url) }
         guard let image = autoreleasepool(invoking: { image(at: url) }) else { throw Failure.unreadable }
-        return bounded(try await recognize(image))
+        return bounded(try await recognize(image, accurate: accurate))
     }
 
     private static func image(at url: URL) -> CGImage? {
@@ -45,7 +45,7 @@ nonisolated enum ClipboardTextExtractor {
     }
 
     /// Full-width strips, so no line is cut across columns and the text keeps its reading order.
-    private static func recognize(_ image: CGImage) async throws -> String {
+    private static func recognize(_ image: CGImage, accurate: Bool = true) async throws -> String {
         var text = ""
         for top in stride(from: 0, to: max(1, image.height - stripOverlap), by: stripHeight - stripOverlap) {
             try Task.checkCancellation()
@@ -53,7 +53,7 @@ nonisolated enum ClipboardTextExtractor {
             let rect = CGRect(x: 0, y: top, width: image.width, height: height)
             guard let strip = image.cropping(to: rect) else { continue }
             let owned = ownedRows(isFirst: top == 0, isLast: top + height == image.height, height: height)
-            let content = try await recognizeStrip(strip, keepingCentresIn: owned)
+            let content = try await recognizeStrip(strip, keepingCentresIn: owned, accurate: accurate)
             if !text.isEmpty, !content.isEmpty { text += "\n" }
             text += bounded(content, bytes: maximumTextBytes - text.utf8.count)
             if text.utf8.count >= maximumTextBytes - 4 { return text }
@@ -69,11 +69,11 @@ nonisolated enum ClipboardTextExtractor {
     }
 
     private static func recognizeStrip(
-        _ strip: CGImage, keepingCentresIn rows: Range<Double>
+        _ strip: CGImage, keepingCentresIn rows: Range<Double>, accurate: Bool
     ) async throws -> String {
         try Task.checkCancellation()
         var request = RecognizeTextRequest()
-        request.recognitionLevel = .accurate
+        request.recognitionLevel = accurate ? .accurate : .fast
         request.minimumTextHeightFraction = 0
         request.automaticallyDetectsLanguage = true
         let observations = try await request.perform(on: strip)

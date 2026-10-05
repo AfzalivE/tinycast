@@ -63,7 +63,7 @@ struct FileSearchScreen: PaletteScreen {
     /// ⌘Y — the overlay follows the selection, so toggling is all the state it needs.
     private func toggleQuickLook(at selection: Int) -> Bool {
         guard result(at: selection) != nil else { return false }
-        vm.fileSearchQuickLook.toggle()
+        vm.isQuickLookPresented.toggle()
         return true
     }
 
@@ -113,8 +113,8 @@ struct FileSearchScreen: PaletteScreen {
                 FileSearchPreview(result: selected)
             }
             .overlay {
-                if vm.fileSearchQuickLook, let selected {
-                    FileSearchQuickLook(result: selected) { vm.fileSearchQuickLook = false }
+                if vm.isVisible, vm.isQuickLookPresented, let selected {
+                    FileSearchQuickLook(url: selected.url, name: selected.name) { vm.isQuickLookPresented = false }
                 }
             }
         }
@@ -157,7 +157,7 @@ enum FileSearchActionsMenu {
                     title: "Show in Finder", systemImage: "folder", shortcut: "⌘↵"
                 ) { coordinator.showInFinder(result) },
                 PopoverMenuItem(title: "Quick Look", systemImage: "eye", shortcut: "⌘Y") {
-                    vm.fileSearchQuickLook = true
+                    vm.isQuickLookPresented = true
                 },
                 PopoverMenuItem(title: "Share…", systemImage: "square.and.arrow.up") {
                     coordinator.share(result)

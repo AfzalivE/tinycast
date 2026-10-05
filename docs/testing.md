@@ -86,6 +86,8 @@ If a change touches anything in the right column, the harness on the left is man
 | `file-search-session-test` | serialized query execution, debounce coalescing and cancellation |
 | `menu-search-test` | `MenuSearch/Model/` decisions, `MenuSearch/Service/` session filtering, the shared `FuzzyMatch` scorer |
 | `action-menu-search-test` | Action-menu query normalization and shared fuzzy matching |
+| `screenshots-test` | Screenshot queries, filters, cleanup policy, recursive scanning, and private pasteboard transfers |
+| `screenshot-index-test` | Screenshot text persistence, stale-result rejection, opt-in lifecycle, pins, and cancellation |
 | `ranking-test` | `Launcher/Model/LauncherRankingStore.swift` |
 | `scopes-test` | `Launcher/Model/SearchScopes.swift` |
 | `app-name-test` | `Platform/AppDisplayName.swift` — every path that names a scanned bundle |
@@ -389,6 +391,31 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 - Launching an app focuses it; escaping the palette returns focus to the app you came from
 - Paste from clipboard history lands in that app, not in Tinycast
 - No flash, flicker or reflow on open, and row metrics unchanged
+
+### Screenshots
+
+- Enable Screenshots, add a capture folder, and run Search Screenshots. The default system location
+  is present, and 3–6 columns match the settings preview.
+- Search by filename, recognized text, and `date:today`; combine `name:` and `text:` with quoted phrases.
+- All, Images, Movies, and Pinned narrow the grid; arrows follow cells, Return copies, Command-Return pastes.
+- A bound Paste Last Screenshot shortcut pastes the newest screenshot image, regardless of pins or filters.
+- Open, Show in Finder, pin/unpin, and confirmed Trash act on the selected file.
+- Quick Look from Actions or ⌘Y previews the selected image or plays its movie. Arrows update the
+  preview. Escape closes only the preview; Close and the card margin also dismiss it. Hiding,
+  leaving Screenshots, or filtering to no results closes it and stops playback. Reopening leaves
+  it closed. Spaces still type into the search field.
+- Copy or paste a MOV, MP4, or M4V into a file-taking app: it receives the original video file,
+  with no screenshot thumbnail. A vanished video leaves the clipboard unchanged.
+- Drag image and movie tiles into Finder and a browser upload field. The receiver gets the original
+  file, not the thumbnail; the source stays in place. A completed drop hides the palette. Cancelling
+  or dropping on a rejected target keeps it open. Click selects, double-click copies, and right-click
+  opens Actions.
+- Text recognition runs only when enabled. Fast and Accurate both work; cloud-only images stay local-only
+  unless cloud recognition is enabled. Explicit Open or Copy may download the chosen file.
+- Set a short Storage Duration on a fixture folder. Cancel leaves it unchanged. Confirm moves only old,
+  unpinned screenshots to Trash. Ordinary media and pins remain. Never performs no automatic deletion.
+- Disable during recognition, then enable again. Work cancels, commands follow the switch, and no stale
+  query results appear. Closing the palette releases its thumbnails.
 
 ### Clipboard
 
