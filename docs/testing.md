@@ -86,6 +86,7 @@ If a change touches anything in the right column, the harness on the left is man
 | `file-search-session-test` | serialized query execution, debounce coalescing and cancellation |
 | `menu-search-test` | `MenuSearch/Model/` decisions, `MenuSearch/Service/` session filtering, the shared `FuzzyMatch` scorer |
 | `action-menu-search-test` | Action-menu query normalization and shared fuzzy matching |
+| `action-menu-focus-test` | Native and extension menu fields focus on every presentation and preserve editing during updates |
 | `ranking-test` | `Launcher/Model/LauncherRankingStore.swift` |
 | `scopes-test` | `Launcher/Model/SearchScopes.swift` |
 | `app-name-test` | `Platform/AppDisplayName.swift` — every path that names a scanned bundle |

@@ -254,6 +254,11 @@ run palette-filter-test    Tinycast/Palette/PaletteMode.swift \
                            Tinycast/Features/Quicklinks/Model/Quicklink.swift \
                            Tinycast/Features/Quicklinks/Model/QuicklinkDestination.swift \
                            Tinycast/Features/CustomCommands/Model/CustomCommand.swift
+run action-menu-focus-test Tinycast/Platform/Appearance.swift \
+                            Tinycast/DesignSystem/{Theme,InterfaceMetrics,KeyCapChip,PopoverMenu}.swift \
+                            Tinycast/DesignSystem/Scrolling/OverflowFade.swift \
+                            Tinycast/Features/Extensions/Model/{ExtensionFormMetrics,ExtensionPickerItem,RenderNode}.swift \
+                            Tinycast/Features/Extensions/UI/ExtensionPickerList.swift
 run action-menu-search-test Tinycast/Palette/ActionMenuSearchQuery.swift \
                             Tinycast/Features/Launcher/Model/SearchRelevance.swift
 run palette-shortcut-test  Tinycast/Palette/PaletteShortcut.swift

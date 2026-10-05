@@ -192,7 +192,7 @@ struct PopoverMenu: View {
             .offset(y: search.placement == .bottom ? -metrics.spacing.xxs / 2 : 0)
             .padding(.vertical, metrics.spacing.xxs / 2)
             .accessibilityLabel(placeholder)
-            .onAppear { searchFocused = true }
+            .onChange(of: palette.menuPresentationToken, initial: true) { searchFocused = true }
     }
 
     private var searchSeparator: some View {
